@@ -1,0 +1,25 @@
+{
+  "name": "ironlogicemulator",
+  "version": "1.0.0",
+  "description": "Emulator z-5r (web) protocol Web-JSON",
+  "main": "Controler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hays0503/IronLogicEmulator.git"
+  },
+  "keywords": [
+    "IronLogic"
+  ],
+  "author": "Sergey Pimenov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hays0503/IronLogicEmulator/issues"
+  },
+  "homepage": "https://github.com/hays0503/IronLogicEmulator#readme",
+  "dependencies": {
+    "nodemon": "^2.0.20"
+  }
+}

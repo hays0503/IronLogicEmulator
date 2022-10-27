@@ -5,8 +5,13 @@ var options = {
   'method': 'POST',
   'hostname': '192.168.0.34',
   'port': 3000,
-  'path': '/',
+  'path': '/user',
   'headers': {
+    "Content-Type":"application/json"
+  },
+  "body":{
+    "user":"Sergey",
+    "age":24
   },
   'maxRedirects': 20
 };
