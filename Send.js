@@ -29,9 +29,9 @@ function SendPost(hostname, port,messages) {
 
 		console.log(`statusCode: ${res.statusCode}`);
 
-		// res.on("data", (d) => {
-		// 	process.stdout.write(d);
-		// });
+		res.on("data", (d) => {
+			process.stdout.write(d);
+		});
 
 	});
 

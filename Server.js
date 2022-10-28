@@ -19,25 +19,43 @@ http
 
 			const body = JSON.parse(Buffer.concat(buffers).toString());
 
-			//console.log(stringify(body), body.messages);
-			console.log("body.messages[0].operation", body.messages[0].operation);
+			body.messages.map((message) => {
+				console.log("body.messages[0].operation", message);
 
-			switch (body.messages[0].operation) {
-				case "power_on":
-					{
-						console.log("Operation power_on");
-						const set_active = [
-							{ id: 765, operation: "set_active", active: 1, online: 0 },
-						];
-						SendPost(host, port, set_active);
-					}
-					break;
-				default:
-					{
-						response.end("Данные успешно получены");
-					}
-					break;
-			}
+				const operation = message?.operation
+					? message.operation
+					: "none_message";
+
+				switch (operation) {
+					case "power_on":
+						{
+							console.log("Operation power_on");
+							const set_active = [
+								{ id: 0, operation: "set_active", active: 1, online: 0 },
+							];
+							SendPost(host, port, set_active);
+						}
+						break;
+					case "none_message":
+						console.log("Пришло пустое сообщение {Не указана операция для выполнения} ");
+						break;
+					case "ping":
+						console.log(`Контролер ${message.id}  пингует сервер`);
+						const  ping_answer = [{"date":"2019-08-30 13:33:24","interval":8,"messages":[]}];
+						SendPost(host, port, ping_answer);
+						break;
+					default:
+						{
+							console.log(
+								"Пришло пустое сообщение, которое мы не смогли обработать, Что то вышло не так, вероятно {Проверь какое сообщение приходит от контролеров} "
+							);
+							response.end(
+								"Пришло пустое сообщение, которое мы не смогли обработать, Что то вышло не так, вероятно {Проверь какое сообщение приходит от контролеров} "
+							);
+						}
+						break;
+				}
+			});
 		}
 	})
 	.listen(3001, () => {
