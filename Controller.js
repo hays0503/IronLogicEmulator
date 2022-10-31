@@ -48,6 +48,9 @@ http
 			const body = JSON.parse(Buffer.concat(buffers).toString());
 
 			body.messages.map((message) => {
+				
+				ControllerState.addNewMessage(message);
+
 				const operation = message?.operation
 					? message.operation
 					: "none_message";
@@ -55,7 +58,7 @@ http
 				let data = new Date();
 				console.log(`\n--------${data.toUTCString()}--------`);
 				console.log("\nСообщение которое прислали", message);
-				console.log("\nОперация", operation);
+				console.log(`\n[${ControllerState.messageID}] Операция`, operation);
 
 				switch (operation) {
 					/**
