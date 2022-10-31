@@ -33,6 +33,8 @@ let ControllerState = new ControllerStateClass();
 //
 let intervalPowerOn = {};
 
+let intervalPing = {};
+
 http
 	.createServer(async (request, response) => {
 		if (request.url === "/user") {
@@ -174,10 +176,6 @@ http
 					default:
 						{
 							console.log(`\n${StatusConstants.undefine_message_controller}`);
-							// const AnswerPing = [
-							// 	{ id: 729568616, operation: "ping", active: 1, mode: 0 },
-							// ];
-							// SendPost(host, port, AnswerPing);
 						}
 						break;
 				}
@@ -186,6 +184,10 @@ http
 	})
 	.listen(3000, () => {
 		intervalPowerOn = setInterval(() => {
-			SendPost(host, port, PowerOn);
+			SendPost(host, port, [PowerOn]);
+		}, 5000);
+
+		intervalPing = setInterval(() => {
+			SendPost(host, port, [Ping]);
 		}, 5000);
 	});
