@@ -1,0 +1,29 @@
+.trigger {
+    padding: 0 24px;
+    font-size: 18px;
+    line-height: 64px;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .trigger:hover {
+    color: #1890ff;
+  }
+  
+  @font-face {
+    font-family: Caveat;
+    src: url(../public/Caveat-VariableFont_wght.ttf);
+  }
+  
+
+  .logo {
+    height: 64px;
+    margin: 16px;
+    text-align: center;
+    font: 1.9em Caveat;
+    color: rgb(255,255,255);
+  }
+  
+  .site-layout .site-layout-background {
+    background: #fff;
+  }

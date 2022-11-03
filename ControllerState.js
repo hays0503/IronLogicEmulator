@@ -4,7 +4,6 @@ class ControllerStateClass {
 	constructor() {
 		this.type = "Z5RWEB";
 		this.sn = 12345;
-
 		this.messageID = 0;
 		this.message = [];
 		this.fw = "1.0.1";
@@ -101,7 +100,7 @@ class ControllerStateClass {
 	addNewMessage(message) {
 		this.messageID++;
 		this.message.push(message);
-		return { messageID, message };
+		return { "messageID":this.messageID, "message":message };
 	}
 }
 

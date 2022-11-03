@@ -10,6 +10,7 @@ const none_message = "none_message";
 const events = "events";
 const ping = "ping";
 const power_on = "power_on";
+const open_door = "open_door"
 
 /**
  * Простая абстракция для указания название литерала команд
@@ -27,6 +28,7 @@ const CommandConstants = {
 	ping,
 	events,
 	power_on,
+	open_door
 };
 
 module.exports = { CommandConstants };

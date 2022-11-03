@@ -33,8 +33,8 @@ function SendPost(hostname, port, messages) {
 	});
 
 	req.on("error", (error) => {
-		if (error.code == "ECONNREFUSED") {
-			console.log("Не могу подключиться к устройству");
+		if (error.code == "ECONNRESET" || error.code == "ECONNREFUSED") {
+			console.log(`Не могу подключиться к устройству [${error.code}]`);
 			return error;
 		}
 		console.error(error);

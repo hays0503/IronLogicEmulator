@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/hays0503/IronLogicEmulator#readme",
   "dependencies": {
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "ws": "^8.10.0"
   }
 }

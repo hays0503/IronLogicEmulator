@@ -48,7 +48,6 @@ http
 			const body = JSON.parse(Buffer.concat(buffers).toString());
 
 			body.messages.map((message) => {
-				
 				ControllerState.addNewMessage(message);
 
 				const operation = message?.operation
@@ -63,6 +62,7 @@ http
 				switch (operation) {
 					/**
 					 * {ЗАПРОС}
+					 * 2.1 SET_ACTIVE
 					 * Активирует / деактивирует работу
 					 * контроллера с сервером. Не активированный
 					 * контроллер не передаёт события и не принимает
@@ -80,15 +80,134 @@ http
 						break;
 					/**
 					 * {ЗАПРОС}
+					 * 2.2 OPEN_DOOR
+					 * Вызывает срабатывание выходного каскада в заданном направлении.
+					 */
+					case CommandConstants.open_door:
+						{
+							console.log("\nopen_door");
+							ControllerState.OpenDoor(message.direction);
+							console.log(
+								"ControllerState.open_door: ",
+								ControllerState.open_door
+							);
+							const messages = [{ id: message.id, "success ": 1 }];
+							SendPost(host, port, messages);
+						}
+						break;
+					/**
+					 * {ЗАПРОС}
+					 * 2.3 SET_MODE
+					 * Устанавливает режим работы контроллера
+					 * (Норма, Свободный проход, Блокировка,
+					 * Ожидание Свободного прохода).
+					 */
+					case CommandConstants.set_mode:
+						{
+							console.log("\nset_mode");
+							ControllerState.set_mode(message.mode);
+							console.log("ControllerState.set_mode: ", ControllerState.mode);
+							const messages = [{ id: message.id, "success ": 1 }];
+							SendPost(host, port, messages);
+						}
+						break;
+					/**
+					 * {ЗАПРОС}
+					 * 2.4 SET_TIMEZONE
+					 * Устанавливает параметры временной зоны контроллера.
+					 */
+					case CommandConstants.set_timezone:
+						{
+							console.log("\nset_timezone");
+							ControllerState.SetTimezone(
+								message.zone,
+								message.begin,
+								message.end,
+								message.days
+							);
+							console.log(
+								"ControllerState.set_timezone: ",
+								ControllerState.zone,
+								ControllerState.begin,
+								ControllerState.end,
+								ControllerState.days
+							);
+							const messages = [{ id: message.id, "success ": 1 }];
+							SendPost(host, port, messages);
+						}
+						break;
+					/**
+					 * {ЗАПРОС}
+					 * 2.5 SET_DOOR_PARAMS
 					 * Устанавливает параметры открывания и контроля состояния двери
 					 */
 					case CommandConstants.set_door_params:
 						{
 							console.log("\nset_door_params");
+							ControllerState.SetDoorParams(
+								message.open,
+								message.open_control,
+								message.close_control
+							);
+							console.log(
+								"ControllerState.set_door_params: ",
+								ControllerState.open,
+								ControllerState.open_control,
+								ControllerState.close_control
+							);
 							const messages = [{ id: message.id, "success ": 1 }];
 							SendPost(host, port, messages);
 						}
 						break;
+					/**
+					 * {ЗАПРОС}
+					 * 2.6 ADD_CARDS
+					 * Добавляет карты в память контроллера.
+					 * Если в памяти контроллера уже имеется карта
+					 * с таким же номером, для этой карты обновляются
+					 * флаги и временные зоны.
+					 */
+					case CommandConstants.add_cards:
+						{
+							console.log("\nadd_cards");
+							ControllerState.AddCards(message.carts);
+							console.log("ControllerState.add_cards: ", ControllerState.cards);
+							const messages = [{ id: message.id, "success ": 1 }];
+							SendPost(host, port, messages);
+						}
+						break;
+					/**
+					 * {ЗАПРОС}
+					 * 2.7 DEL_CARDS
+					 * Удаляет карты из памяти контроллера.
+					 */
+					case CommandConstants.del_cards:
+						{
+							console.log("\ndel_cards");
+							ControllerState.DelCards(message.carts);
+							console.log("ControllerState.del_cards: ", ControllerState.cards);
+							const messages = [{ id: message.id, "success ": 1 }];
+							SendPost(host, port, messages);
+						}
+						break;
+					/**
+					 * {ЗАПРОС}
+					 * 2.8 CLEAR_CARDS
+					 * Удаляет все карты из памяти контроллера.
+					 */
+					case CommandConstants.clear_cards:
+						{
+							console.log("\nclear_cards");
+							ControllerState.ClearCards();
+							console.log(
+								"ControllerState.clear_cards: ",
+								ControllerState.cards
+							);
+							const messages = [{ id: message.id, "success ": 1 }];
+							SendPost(host, port, messages);
+						}
+						break;
+//////////////////////////////////////////////////////////////////////////////////////////////////
 					/**
 					 * {ЗАПРОС}
 					 * Посылается контроллером в режиме
@@ -98,6 +217,7 @@ http
 					case CommandConstants.check_access:
 						{
 							console.log("\ncheck_access");
+							ControllerState.check_access();
 							const messages = [
 								{
 									id: message.id,
@@ -109,66 +229,7 @@ http
 							SendPost(host, port, messages);
 						}
 						break;
-					/**
-					 * {ЗАПРОС}
-					 * Удаляет все карты из памяти контроллера.
-					 */
-					case CommandConstants.clear_cards:
-						{
-							console.log("\nclear_cards");
-							const messages = [{ id: message.id, "success ": 1 }];
-							SendPost(host, port, messages);
-						}
-						break;
-					/**
-					 * {ЗАПРОС}
-					 * Удаляет карты из памяти контроллера.
-					 */
-					case CommandConstants.del_cards:
-						{
-							console.log("\ndel_cards");
-							const messages = [{ id: message.id, "success ": 1 }];
-							SendPost(host, port, messages);
-						}
-						break;
-					/**
-					 * {ЗАПРОС}
-					 * Добавляет карты в память контроллера.
-					 * Если в памяти контроллера уже имеется карта
-					 * с таким же номером, для этой карты обновляются
-					 * флаги и временные зоны.
-					 */
-					case CommandConstants.add_cards:
-						{
-							console.log("\nadd_cards");
-							const messages = [{ id: message.id, "success ": 1 }];
-							SendPost(host, port, messages);
-						}
-						break;
-					/**
-					 * {ЗАПРОС}
-					 * Устанавливает режим работы контроллера
-					 * (Норма, Свободный проход, Блокировка,
-					 * Ожидание Свободного прохода).
-					 */
-					case CommandConstants.set_mode:
-						{
-							console.log("\nset_mode");
-							const messages = [{ id: message.id, "success ": 1 }];
-							SendPost(host, port, messages);
-						}
-						break;
-					/**
-					 * {ЗАПРОС}
-					 * Устанавливает параметры временной зоны контроллера.
-					 */
-					case CommandConstants.set_timezone:
-						{
-							console.log("\nset_timezone");
-							const messages = [{ id: message.id, "success ": 1 }];
-							SendPost(host, port, messages);
-						}
-						break;
+
 					/**
 					 * {НЕ ЗАПРОС}
 					 * Это Обработчик событий в котором не было каких либо команд
